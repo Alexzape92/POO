@@ -10,8 +10,8 @@ static int diact;
 static int mesact;
 static int annoact;
 public:
-    static int Annominimo;
-    static int Annomaximo;
+    static const int Annominimo;
+    static const int Annomaximo;
     class Invalida;
     explicit Fecha(int d = diact, int m = mesact, int a = annoact);
     Fecha(const char* s);
@@ -20,9 +20,15 @@ public:
     int anno() const;
     Fecha& operator ++();       //Pre, devuelve el modificado
     Fecha operator ++(int);     //Post, devuelve copia porque devuelve el original, no el modificado
+    Fecha& operator --();
+    Fecha operator --(int);
+    friend Fecha operator +(Fecha f, int n);
+    friend Fecha operator -(Fecha f, int n);
 private:
     int dia_, mes_, anno_;
-    static int diasmes[];
+    static const int diasmes[];
+
+    void corregir_fecha(Fecha& f);
 };
 
 
