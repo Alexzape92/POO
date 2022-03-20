@@ -92,7 +92,7 @@ FCT_BGN() {
      modificaciones de las partes comunes.
 */
   FCTMF_SUITE_CALL(test_fecha);
-  FCTMF_SUITE_CALL(test_cadena);
+//  FCTMF_SUITE_CALL(test_cadena);
 #if defined(P2) || defined(P3) || defined(P4)
   FCTMF_SUITE_CALL(test_p2);
 #endif

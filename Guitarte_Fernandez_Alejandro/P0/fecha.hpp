@@ -10,8 +10,8 @@ static int diact;
 static int mesact;
 static int annoact;
 public:
-    static const int Annominimo;
-    static const int Annomaximo;
+    static const int AnnoMinimo;
+    static const int AnnoMaximo;
     class Invalida;
     explicit Fecha(int d = diact, int m = mesact, int a = annoact);
     Fecha(const char* s);
@@ -24,11 +24,21 @@ public:
     Fecha operator --(int);
     friend Fecha operator +(Fecha f, int n);
     friend Fecha operator -(Fecha f, int n);
+    Fecha& operator +=(int n);
+    Fecha& operator -=(int n);
+    operator const char*() const{return getCad(); };
+    friend bool operator <(const Fecha& a, const Fecha& b);
+    friend bool operator <=(const Fecha& a, const Fecha& b);
+    friend bool operator >(const Fecha& a, const Fecha& b);
+    friend bool operator >=(const Fecha& a, const Fecha& b);
+    friend bool operator ==(const Fecha& a, const Fecha& b);
+    friend bool operator !=(const Fecha& a, const Fecha& b);
 private:
     int dia_, mes_, anno_;
     static const int diasmes[];
 
     void corregir_fecha(Fecha& f);
+    const char* getCad() const;
 };
 
 

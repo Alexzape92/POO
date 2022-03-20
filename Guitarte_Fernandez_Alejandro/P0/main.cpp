@@ -1,11 +1,12 @@
-#include "Fecha.hpp"
+#include "fecha.hpp"
 #include <iostream>
 
 int main(){
-    Fecha f(20, 3);
+    Fecha f;
 
-    f = f - 50;
-    std::cout << f.dia() << '/' << f.mes() << '/' << f.anno() << std::endl;
+    f += 10;
+
+    std::cout << f << std::endl;
 
     return 0;
 }
