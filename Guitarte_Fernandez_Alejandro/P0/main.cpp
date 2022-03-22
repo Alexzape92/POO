@@ -1,12 +1,11 @@
-#include "fecha.hpp"
+#include "cadena.hpp"
+#include <cstring>
 #include <iostream>
 
 int main(){
-    Fecha f;
+    Cadena str{"eenie meenie moe"};
 
-    f += 10;
-
-    std::cout << f << std::endl;
+    std::cout << str.substr(6, 6) << std::endl;
 
     return 0;
 }
