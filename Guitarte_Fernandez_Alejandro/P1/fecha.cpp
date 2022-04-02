@@ -212,14 +212,14 @@ bool operator ==(const Fecha& a, const Fecha& b){
 }
 
 bool operator !=(const Fecha& a, const Fecha& b){
-    bool res = true;
+    bool res = false;
 
-    if(a.anno_ == b.anno_)
-        res = false;
-    else if(a.mes_ == b.mes_)
-        res = false;
-    else if(a.dia_ == b.dia_)
-        res = false;
+    if(a.anno_ != b.anno_)
+        res = true;
+    else if(a.mes_ != b.mes_)
+        res = true;
+    else if(a.dia_ != b.dia_)
+        res = true;
     
     return res;
 }
@@ -229,7 +229,38 @@ std::istream& operator >>(std::istream& is, Fecha& f){
     is >> aux;  //Tenemos en aux la cadena en cuestión
     const char* fmt = aux;
 
-    f = Fecha(fmt);
+    try{
+        f = Fecha(fmt);
+    }catch(Fecha::Invalida e){
+        is.setstate(std::ios_base::failbit);    //Marcamos el flujo de entrada al estado de error
+        f = Fecha();                            //La fecha toma el valor de hoy
+        throw;                                  //Relanzamos Fecha::Invalida
+    }
+
+    //Aquí estamos seguros de que, al menos, el formato era correcto
+    unsigned i = 0, cont = 0;
+    while(fmt[i] == '0' && cont < 2){
+        cont++;
+        i++;
+    }
+    if(cont == 2 && fmt[i] != '/'){
+        is.setstate(std::ios_base::failbit);
+        f = Fecha();
+        throw Fecha::Invalida("Se han introducido más de 3 dígitos");
+    }
+    else{
+        while(fmt[i] != '/') i++;
+        cont = 0;
+        while(fmt[i] == '0' && cont < 2){
+            cont++;
+            i++;
+        }
+        if(cont == 2 && fmt[i] != '/'){
+            is.setstate(std::ios_base::failbit);
+            f = Fecha();
+            throw Fecha::Invalida("Se han introducido más de 3 dígitos");
+        }
+    }
 
     delete[] aux;
     return is;
