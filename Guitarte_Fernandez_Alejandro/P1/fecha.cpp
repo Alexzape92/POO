@@ -225,7 +225,7 @@ bool operator !=(const Fecha& a, const Fecha& b){
 }
 
 std::istream& operator >>(std::istream& is, Fecha& f){
-    char *aux = new char[10];
+    char *aux = new char[20];
     is >> aux;  //Tenemos en aux la cadena en cuestión
     const char* fmt = aux;
 

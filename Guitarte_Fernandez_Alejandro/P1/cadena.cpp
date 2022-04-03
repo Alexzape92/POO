@@ -15,6 +15,11 @@ Cadena::Cadena(const Cadena& c): s_{new char[c.tam_+1]}, tam_{c.tam_}{
     s_[tam_] = '\0';
 }
 
+Cadena::Cadena(Cadena&& c): s_{c.s_}, tam_{c.tam_}{
+    c.s_ = nullptr; //Evitamos que nos borre la memoria dinámica que ahora tiene la nueva Cadena
+    c.tam_ = 0;
+}
+
 Cadena::Cadena(const char* c): s_{new char[(unsigned)strlen(c)+1]}, tam_{(unsigned)strlen(c)}{
     for (unsigned i = 0; i < tam_; i++)
         s_[i] = c[i];
@@ -31,6 +36,17 @@ Cadena& Cadena::operator =(const Cadena& c){
         for(unsigned i = 0; i < tam_; i++)
             s_[i] = c.s_[i];
         s_[tam_] = '\0';
+    }
+    return *this;
+}
+
+Cadena& Cadena::operator =(Cadena&& c){
+    if(this != &c){
+        delete[] s_;
+        s_ = c.s_;
+        tam_ = c.tam_;
+        c.s_ = nullptr; //Evitamos que nos borre la memoria dinámica que ahora tiene la cadena *this
+        c.tam_ = 0;
     }
     return *this;
 }
@@ -81,27 +97,27 @@ Cadena Cadena::operator +(const Cadena& c2) const{
 }
 
 bool operator <(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1, c2) < 0);
+    return (strcmp(c1.s_, c2.s_) < 0);
 }
 
 bool operator >(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1, c2) > 0);
+    return (strcmp(c1.s_, c2.s_) > 0);
 }
 
 bool operator <=(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1, c2) <= 0);
+    return (strcmp(c1.s_, c2.s_) <= 0);
 }
 
 bool operator >=(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1, c2) >= 0);
+    return (strcmp(c1.s_, c2.s_) >= 0);
 }
 
 bool operator ==(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1, c2) == 0);
+    return (strcmp(c1.s_, c2.s_) == 0);
 }
 
 bool operator !=(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1, c2) != 0);
+    return (strcmp(c1.s_, c2.s_) != 0);
 }
 
 char& Cadena::at(unsigned i){
@@ -126,4 +142,33 @@ Cadena Cadena::substr(unsigned i, unsigned t) const{
         r.s_[cont] = s_[cont+i];
     
     return r;
+}
+
+std::istream& operator >>(std::istream& is, Cadena& c){
+    char *aux = new char[33], car = 'c';
+    unsigned i = 0;
+    for(i = 0; i < 33; i++) //Llenamos la cadena con el carácter terminador, de manera que si no se llena, el último siempre será \0
+        aux[i] = '\0';
+
+    i = 0;
+    while((car = is.get()) != EOF && isspace(car));   //Leemos hasta encontrar un caracter distinto de ' '
+    is.putback(car);                                  //Devolvemos el último carácter al flujo de entrada                             
+
+    while((car = is.get()) != EOF && !isspace(car) && i < 32){  //Metemos la palabra en la cadena
+        aux[i] = car;
+        i++;
+    }
+    is.putback(car);    //Devolvemos el último caracter al flujo de entrada, ya sea el espacio que delimita 2 palabras, el EOF o un carácter que no se ha leído 
+                        //porque se han alcanzado los 32 carácteres
+
+    c = Cadena(aux);
+
+    delete[] aux;
+    return is;
+}
+
+std::ostream& operator <<(std::ostream& os, const Cadena& c){
+    os << c.s_;
+
+    return os;
 }

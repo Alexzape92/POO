@@ -34,10 +34,9 @@ cadena.o: cadena.hpp
 
 fecha.o: fecha.hpp
 
-prueba: main.o $(MIS_OBJ)
-	$(CXX) -o $@ $^
-
-main.o: fecha.hpp
+valgrind: $(AUTO_EXE) $(CONS_EXE)
+	valgrind ./$<
+	valgrind ./test-fechacadena-consola
 
 clean:
-	$(RM) -rf test-P0-auto prueba *.o core *~
+	$(RM) -rf test-P0-auto test-fechacadena-consola *.o core *~
