@@ -1,0 +1,4 @@
+*.o
+.vscode/
+test-fechacadena-consola
+test-P0-auto
