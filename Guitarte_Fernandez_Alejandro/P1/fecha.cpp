@@ -60,29 +60,15 @@ Fecha::Fecha(const char* s){
         throw Invalida("El anno se sale del rango");
 }
 
-int Fecha::dia() const {
-    return dia_;
-}
-
-int Fecha::mes() const {
-    return mes_;
-}
-
-int Fecha::anno() const {
-    return anno_;
-}
-
 Fecha& Fecha::operator++() {
-    dia_++;
-    corregir_fecha(*this);
+    *this += 1;
 
     return *this;
 }
 
 Fecha Fecha::operator++(int) {
     Fecha c(*this);
-    dia_++;
-    corregir_fecha(*this);
+    *this += 1;
 
     return c;
 }
@@ -110,24 +96,23 @@ Fecha& Fecha::operator +=(int n){
 }
 
 Fecha& Fecha::operator -=(int n){
-    dia_ -= n;
-    corregir_fecha(*this);
+    *this += -n;
 
     return *this;
 }
 
-Fecha operator +(Fecha f, int n){
-    f.dia_ += n;
-    f.corregir_fecha(f);
+Fecha Fecha::operator +(int n) const{
+    Fecha res = *this;
+    res += n;
 
-    return f;
+    return res;
 }
 
-Fecha operator -(Fecha f, int n){
-    f.dia_ -= n;
-    f.corregir_fecha(f);
+Fecha Fecha::operator -(int n) const{
+    Fecha res = *this;
+    res -= n;
 
-    return f;
+    return res;
 }
 
 bool operator <(const Fecha& a, const Fecha& b){
@@ -148,54 +133,15 @@ bool operator <(const Fecha& a, const Fecha& b){
 }
 
 bool operator <=(const Fecha& a, const Fecha& b){
-    bool res = true;
-
-    if(a.anno_ > b.anno_)
-        res = false;
-    else if(a.anno_ == b.anno_){
-        if(a.mes_ > b.mes_)
-            res = false;
-        else if(a.mes_ == b.mes_){  
-            if(a.dia_ > b.dia_)
-                res = false;
-        }
-    }
-    
-    return res;
+    return !(b < a);
 }
 
 bool operator >(const Fecha& a, const Fecha& b){
-    bool res = true;
-
-    if(a.anno_ < b.anno_)
-        res = false;
-    else if(a.anno_ == b.anno_){
-        if(a.mes_ < b.mes_)
-            res = false;
-        else if(a.mes_ == b.mes_){  
-            if(a.dia_ <= b.dia_)
-                res = false;
-        }
-    }
-    
-    return res;
+    return b < a;
 }
 
 bool operator >=(const Fecha& a, const Fecha& b){
-    bool res = true;
-
-    if(a.anno_ < b.anno_)
-        res = false;
-    else if(a.anno_ == b.anno_){
-        if(a.mes_ < b.mes_)
-            res = false;
-        else if(a.mes_ == b.mes_){  
-            if(a.dia_ < b.dia_)
-                res = false;
-        }
-    }
-    
-    return res;
+    return !(a < b);
 }
 
 bool operator ==(const Fecha& a, const Fecha& b){
@@ -212,16 +158,7 @@ bool operator ==(const Fecha& a, const Fecha& b){
 }
 
 bool operator !=(const Fecha& a, const Fecha& b){
-    bool res = false;
-
-    if(a.anno_ != b.anno_)
-        res = true;
-    else if(a.mes_ != b.mes_)
-        res = true;
-    else if(a.dia_ != b.dia_)
-        res = true;
-    
-    return res;
+    return !(a == b);
 }
 
 std::istream& operator >>(std::istream& is, Fecha& f){
@@ -312,7 +249,7 @@ void Fecha::corregir_fecha(Fecha& f){
         throw Fecha::Invalida("Se ha excedido del anno minimo");
 }
 
-const char *Fecha::getCad() const{
+const char *Fecha::getCad() const noexcept{
     char *res = new char[50], *aux = new char[50];
     std::tm* fec = new tm;
 

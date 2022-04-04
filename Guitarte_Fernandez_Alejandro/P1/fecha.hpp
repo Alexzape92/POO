@@ -16,18 +16,18 @@ public:
     class Invalida;
     explicit Fecha(int d = diact, int m = mesact, int a = annoact);
     Fecha(const char* s);
-    int dia() const;
-    int mes() const;
-    int anno() const;
+    int dia() const noexcept;
+    int mes() const noexcept;
+    int anno() const noexcept;
     Fecha& operator ++();       //Pre, devuelve el modificado
     Fecha operator ++(int);     //Post, devuelve copia porque devuelve el original, no el modificado
     Fecha& operator --();
     Fecha operator --(int);
-    friend Fecha operator +(Fecha f, int n);
-    friend Fecha operator -(Fecha f, int n);
+    Fecha operator +(int n) const;
+    Fecha operator -(int n) const;
     Fecha& operator +=(int n);
     Fecha& operator -=(int n);
-    const char* cadena() const{return getCad();};
+    const char* cadena() const noexcept {return getCad();};
     friend bool operator <(const Fecha& a, const Fecha& b);
     friend bool operator <=(const Fecha& a, const Fecha& b);
     friend bool operator >(const Fecha& a, const Fecha& b);
@@ -42,7 +42,7 @@ private:
     static const int diasmes[];
 
     void corregir_fecha(Fecha& f);
-    const char* getCad() const;
+    const char* getCad() const noexcept;
 };
 
 
@@ -55,5 +55,16 @@ private:
 };
 
 
+inline int Fecha::dia() const noexcept{
+    return dia_;
+}
+
+inline int Fecha::mes() const noexcept{
+    return mes_;
+}
+
+inline int Fecha::anno() const noexcept{
+    return anno_;
+}
 
 #endif

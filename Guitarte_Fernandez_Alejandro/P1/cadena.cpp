@@ -1,7 +1,5 @@
 #include "cadena.hpp"
 #include <cstring>
-#include <cstdlib>
-#include <iostream>
 
 Cadena::Cadena(unsigned t, char relle): s_{new char[t+1]}, tam_{t} {
     for(unsigned i = 0; i < tam_; i++)
@@ -81,6 +79,7 @@ Cadena& Cadena::operator +=(const Cadena& c){
     for(unsigned i = 0; i < tam_ + 1; i++)
         s_[i] = aux[i];
 
+    delete[] aux;
     return *this;
 }
 
