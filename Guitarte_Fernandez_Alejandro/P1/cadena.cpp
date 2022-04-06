@@ -96,27 +96,27 @@ Cadena Cadena::operator +(const Cadena& c2) const{
 }
 
 bool operator <(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1.s_, c2.s_) < 0);
+    return (strcmp(c1.c_str(), c2.c_str()) < 0);
 }
 
 bool operator >(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1.s_, c2.s_) > 0);
+    return (c2 < c1);
 }
 
 bool operator <=(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1.s_, c2.s_) <= 0);
+    return !(c2 < c1);
 }
 
 bool operator >=(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1.s_, c2.s_) >= 0);
+    return !(c1 < c2);
 }
 
 bool operator ==(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1.s_, c2.s_) == 0);
+    return (strcmp(c1.c_str(), c2.c_str()) == 0);
 }
 
 bool operator !=(const Cadena& c1, const Cadena& c2){
-    return (strcmp(c1.s_, c2.s_) != 0);
+    return !(c1 == c2);
 }
 
 char& Cadena::at(unsigned i){
@@ -167,7 +167,7 @@ std::istream& operator >>(std::istream& is, Cadena& c){
 }
 
 std::ostream& operator <<(std::ostream& os, const Cadena& c){
-    os << c.s_;
+    os << c.c_str();
 
     return os;
 }

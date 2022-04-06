@@ -1,4 +1,4 @@
-CXX=clang++
+CXX=g++
 CXXFLAGS=-std=c++17 -Wall -Wextra -pedantic -g
 CPPFLAGS=-DP1 -I../Tests-auto -I.
 VPATH=../Tests-auto:.
