@@ -1,0 +1,68 @@
+//La clase menu tiene una relación de composición con opción, navegable de menú a opción. 1 menú se compone de * opciones.
+class menu{
+public:
+	typedef std::set<opcion> opciones;
+	void tiene_opcion(const opcion& op);	//Añade op a ops
+	const opciones& opciones_menu() const;
+private:
+	opciones ops;
+};
+
+//La clase opcion se relaciona con un formulario, y un formulario con * opciones. Navegable de opcion a formulario.
+class opcion{
+public:
+	opcion(const formulario& f);	//form = &f
+	const formulario& formu() const;
+private:
+	const formulario* form;
+};
+
+class formulario{
+public:
+/*...*/
+private:
+*/...*/
+};
+
+//EJERCICIO 2---------------------------------------------------------------------------------------------------------------------------------------
+
+class Alumno{
+public:
+	typedef std::map<Asignatura*, Grupo*> Matriculas;
+	void matricular(const Asignatura& asig, const Grupo& grp);
+	const Matriculas& matriculas_alumno() const;
+private:
+	Matriculas mats;
+};
+
+class Asignatura{
+public:
+	typedef std::map<Alumno*, Grupo*> Matriculados;
+	typedef std::set<Grupo*> Grupos;
+	Asignatura(const Grupos& gs);	//gs tiene que tener al menos un grupo siempre
+	void añadir_matriculado(const Alumno& alum, const Grupo& grp);
+	const Matriculados& alumnos_grupo() const;
+	void añadir_grupo(const Grupo& grp);
+	const Grupos& grupos_asig() const;
+private:
+	Matriculados mats;
+	Grupos grps;
+};
+
+class Grupo{
+public:
+	Grupo(const Asigntatura& a, const Profesor& p);
+private:
+	const Asignatura* asig;
+	const Profesor* prof;
+	std::string aula;
+	int h_semana;
+};
+
+
+
+
+
+
+
+
