@@ -10,7 +10,10 @@ class Clave{}; //Hacer más adelante
 
 class Usuario{
 public:
+    //Relaciones
     typedef std::map<Numero, Tarjeta*> Tarjetas;
+    void es_titular_de(const Tarjeta& tj);
+    void no_es_titular_de(const Tarjeta& tj);
     typedef std::unordered_map<Articulo*, unsigned int> Articulos;
 
     //Observadores
