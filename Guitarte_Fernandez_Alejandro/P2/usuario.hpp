@@ -23,6 +23,9 @@ public:
     const Cadena& direccion() const;
     const Tarjetas& tarjetas() const;
     const Articulos& compra() const;
+
+    //Destructor
+    ~Usuario();
 private:
     const Cadena ide, nom, ape, dir;
     Clave pass;
@@ -53,6 +56,11 @@ inline const Usuario::Tarjetas& Usuario::tarjetas() const{
 
 inline const Usuario::Articulos& Usuario::compra() const{
     return carrito;
+}
+
+inline Usuario::~Usuario(){
+    for(auto t = tarjs.begin(); t != tarjs.end(); t++)
+        t->second->anula_titular();
 }
 
 #endif

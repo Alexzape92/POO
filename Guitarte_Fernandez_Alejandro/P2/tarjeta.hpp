@@ -4,6 +4,7 @@
 #include "usuario.hpp"
 #include "fecha.hpp"
 #include <set>
+#include <iostream>
 
 class Numero{
 public:
@@ -43,6 +44,7 @@ public:
     typedef enum Tipo{Otro, VISA, Mastercard, Maestro, JCB, AmericanExpress};
     class Caducada;
     class Num_duplicado;
+    class Desactivada{};
 
     Tarjeta(const Numero& n, Usuario& tit, const Fecha& fec);
 
@@ -55,6 +57,14 @@ public:
     const Usuario* titular() const;
     const Fecha& caducidad() const;
     bool activa() const;
+    Tipo tipo() const;
+
+    //Modificadores
+    bool activa(bool a = true);
+    void anula_titular();
+
+    //Destructor
+    ~Tarjeta();
 private:
     const Numero num;
     const Usuario* titu;
@@ -63,6 +73,13 @@ private:
 
     static std::set<Numero> numeros;
 };
+
+//Operadores de insercion en flujo
+std::ostream& operator <<(std::ostream& os, const Tarjeta::Tipo& t);
+std::ostream& operator <<(std::ostream& os, const Tarjeta& tj);
+
+//Comparacion
+bool operator <(const Tarjeta& tj1, const Tarjeta& tj2);
 
 
 class Tarjeta::Caducada{
@@ -108,6 +125,11 @@ inline const Fecha& Tarjeta::caducidad() const{
 
 inline bool Tarjeta::activa() const{
     return act;
+}
+
+inline void Tarjeta::anula_titular(){
+    titu = nullptr;
+    act = false;
 }
 
 #endif
