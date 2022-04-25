@@ -6,7 +6,41 @@
 #include <map>
 #include <unordered_map>
 
-class Clave{}; //Hacer más adelante
+class Clave{
+public:
+    class Incorrecta;
+
+    //Constructor
+    Clave(const char* passwd);
+
+    //Observadores
+    Cadena clave() const;
+    bool verifica(const char* passwd) const;
+private:
+    Cadena pass;
+};
+
+//Definiciones en línea Clave
+
+
+class Clave::Incorrecta{
+public:
+    typedef enum Razon{CORTA, ERROR_CRYPT};
+
+    Incorrecta(Razon r);
+    Razon razon() const;
+private:
+    Razon why;
+};
+
+//Definiciones en línea Clave::Incorrecta
+inline Clave::Incorrecta::Incorrecta(Razon r): why{r}{}
+
+inline Clave::Incorrecta::Razon Clave::Incorrecta::razon() const{
+    return why;
+}
+
+//USUARIO------------------------------------------------------------------------------------------------------------------
 
 class Usuario{
 public:

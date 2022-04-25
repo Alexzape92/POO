@@ -60,7 +60,7 @@ public:
     Tipo tipo() const;
 
     //Modificadores
-    bool activa(bool a = true);
+    bool activa(bool a);
     void anula_titular();
 
     //Destructor
@@ -130,6 +130,10 @@ inline bool Tarjeta::activa() const{
 inline void Tarjeta::anula_titular(){
     titu = nullptr;
     act = false;
+}
+
+inline bool Tarjeta::activa(bool a){
+    return act = a;
 }
 
 #endif
