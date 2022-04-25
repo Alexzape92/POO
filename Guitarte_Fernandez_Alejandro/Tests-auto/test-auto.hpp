@@ -13,7 +13,7 @@
 #define TEST_AUTO_HPP_
 
 #if !defined(P0) && !defined(P1) && !defined(P2) && !defined(P3) && !defined(P4)
-#error Debe definir Px siendo x [0..4] el núm. de la práctica a probar
+#error Debe definir Px siendo x | 0 ≤ x ≤ 4 el n.º de la práctica a probar
 #endif
 
 #include <ctime>
@@ -27,8 +27,8 @@
 #include <type_traits>
 #include <locale>
 /**
-   Lamentablemente, <regex>, de la biblioteca estándar de C++11,
-   no funcionaba bien en algunas versiones antiguas: muy mal en GCC C++ 4.8 y 
+   Lamentablemente, aún <regex>, de la biblioteca estándar de C++11,
+   no funciona bien en algunas versiones: muy mal en GCC C++ 4.8 y 
    algo menos, pero no bien, en GCC C++ 4.9. A partir de la versión 5 ya
    funciona bien. En cuanto a CLang, usa la misma biblioteca que GCC de
    forma predeterminada. El problema no es tanto del compilador como de
