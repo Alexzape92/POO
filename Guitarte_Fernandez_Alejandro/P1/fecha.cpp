@@ -4,12 +4,8 @@
 #include <cstring>
 #include <iostream>
 
+
 //-----MIEMBROS ESTÁTICOS--------------------------------------------------------------------------
-std::time_t Fecha::tiempo_calendario = std::time(nullptr);
-std::tm* Fecha::tiempo_descompuesto = std::localtime(&tiempo_calendario);
-int Fecha::diact = tiempo_descompuesto->tm_mday;
-int Fecha::mesact = tiempo_descompuesto->tm_mon + 1;
-int Fecha::annoact = tiempo_descompuesto->tm_year + 1900;
 const int Fecha::AnnoMinimo = 1902;
 const int Fecha::AnnoMaximo = 2037;
 
@@ -17,12 +13,16 @@ const int Fecha::diasmes[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 //-------------------------------------------------------------------------------------------------
 
 Fecha::Fecha(int d/* = diact*/, int m/* = mesact*/, int a/* = annoact*/): dia_(d), mes_(m), anno_(a){
+    time_t tiempo = time(NULL);
+    tm* tiempo_desc = localtime(&tiempo);
     if(dia_ == 0)
-        dia_ = diact;
+        dia_ =tiempo_desc->tm_mday;
+
     if(mes_ == 0)
-        mes_ = mesact;
+        mes_ = tiempo_desc->tm_mon + 1;
+
     if(anno_ == 0)
-        anno_ = annoact;
+        anno_ = tiempo_desc->tm_year + 1900;
     
     //-----------------------------
     //--------EXCEPCIONES----------
@@ -40,12 +40,17 @@ Fecha::Fecha(int d/* = diact*/, int m/* = mesact*/, int a/* = annoact*/): dia_(d
 Fecha::Fecha(const char* s){
     if(sscanf(s, "%d/%d/%d", &dia_, &mes_, &anno_) != 3)
         throw Invalida("Formato incorrecto");
+        
+    time_t tiempo = time(NULL);
+    tm* tiempo_desc = localtime(&tiempo);
     if(dia_ == 0)
-        dia_ = diact;
+        dia_ =tiempo_desc->tm_mday;
+
     if(mes_ == 0)
-        mes_ = mesact;
+        mes_ = tiempo_desc->tm_mon + 1;
+
     if(anno_ == 0)
-        anno_ = annoact;
+        anno_ = tiempo_desc->tm_year + 1900;
 
     //-----------------------------
     //--------EXCEPCIONES----------

@@ -4,17 +4,13 @@
 #include <ctime>
 #include <iostream>
 
+
 class Fecha{
-static std::time_t tiempo_calendario;
-static std::tm* tiempo_descompuesto;
-static int diact;
-static int mesact;
-static int annoact;
 public:
     static const int AnnoMinimo;
     static const int AnnoMaximo;
     class Invalida;
-    explicit Fecha(int d = diact, int m = mesact, int a = annoact);
+    explicit Fecha(int d = 0, int m = 0, int a = 0);
     Fecha(const char* s);
     int dia() const noexcept;
     int mes() const noexcept;

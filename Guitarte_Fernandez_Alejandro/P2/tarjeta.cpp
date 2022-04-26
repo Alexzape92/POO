@@ -65,6 +65,8 @@ Tarjeta::Tipo Tarjeta::tipo() const{
 Tarjeta::~Tarjeta(){
     if(titu != nullptr)
         const_cast<Usuario*>(titu)->no_es_titular_de(*this);
+    
+    numeros.erase(this->num);
 }
 
 //Operador de insercion en flujo de salida

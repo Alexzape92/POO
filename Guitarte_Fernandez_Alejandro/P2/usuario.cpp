@@ -44,6 +44,8 @@ void Usuario::compra(Articulo& art, unsigned int cant){
 Usuario::~Usuario(){
     for(auto t = tarjs.begin(); t != tarjs.end(); t++)
         t->second->anula_titular();
+    
+    registrados.erase(this->ide);
 }
 
 std::ostream& operator <<(std::ostream& os, const Usuario& us){
