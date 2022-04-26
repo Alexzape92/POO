@@ -6,9 +6,11 @@
 #include <set>
 #include <iostream>
 
+class Usuario;
+
 class Numero{
 public:
-    typedef enum Razon{LONGITUD, DIGITOS, NO_VALIDO};
+    typedef enum{LONGITUD, DIGITOS, NO_VALIDO} Razon;
     class Incorrecto;
 
     Numero(const Cadena& cad);
@@ -41,7 +43,7 @@ inline Numero::Razon Numero::Incorrecto::razon() const{
 //-------------------------------------------------------------------------------------------
 class Tarjeta{
 public:
-    typedef enum Tipo{Otro, VISA, Mastercard, Maestro, JCB, AmericanExpress};
+    typedef enum{Otro, VISA, Mastercard, Maestro, JCB, AmericanExpress} Tipo;
     class Caducada;
     class Num_duplicado;
     class Desactivada{};

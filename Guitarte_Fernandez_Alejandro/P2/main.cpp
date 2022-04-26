@@ -1,9 +1,11 @@
-#include "articulo.hpp"
+#include "tarjeta.hpp"
 
 int main(){
-    Articulo art{"110", "Fundamentos de C++", "23/09/1998", 29.95812};
-
-    std::cout << art;
+    try{
+        Numero num{"4164 2959 2196 7832"};
+    }catch(const Numero::Incorrecto& e){
+        std::cout << e.razon();
+    }
 
     return 0;
 }

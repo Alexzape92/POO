@@ -3,11 +3,17 @@
 #include "cadena.hpp"
 #include "tarjeta.hpp"
 #include "articulo.hpp"
+#include <iostream>
+#include <unordered_set>
 #include <map>
 #include <unordered_map>
 
+class Numero;
+class Tarjeta;
+
 class Clave{
 public:
+    typedef enum{CORTA, ERROR_CRYPT} Razon;
     class Incorrecta;
 
     //Constructor
@@ -18,15 +24,16 @@ public:
     bool verifica(const char* passwd) const;
 private:
     Cadena pass;
+    const char* sal;
 };
 
 //Definiciones en línea Clave
-
+inline Cadena Clave::clave() const{
+    return pass;
+}
 
 class Clave::Incorrecta{
 public:
-    typedef enum Razon{CORTA, ERROR_CRYPT};
-
     Incorrecta(Razon r);
     Razon razon() const;
 private:
@@ -36,7 +43,7 @@ private:
 //Definiciones en línea Clave::Incorrecta
 inline Clave::Incorrecta::Incorrecta(Razon r): why{r}{}
 
-inline Clave::Incorrecta::Razon Clave::Incorrecta::razon() const{
+inline Clave::Razon Clave::Incorrecta::razon() const{
     return why;
 }
 
@@ -47,8 +54,16 @@ public:
     //Relaciones
     typedef std::map<Numero, Tarjeta*> Tarjetas;
     void es_titular_de(const Tarjeta& tj);
-    void no_es_titular_de(const Tarjeta& tj);
+    void no_es_titular_de(Tarjeta& tj);
     typedef std::unordered_map<Articulo*, unsigned int> Articulos;
+
+    //Excepciones
+    class Id_duplicado;
+
+    //Constructor
+    Usuario(const Cadena& ident, const Cadena& nomb, const Cadena& apell, const Cadena& direc, const Clave& cl);
+    Usuario(const Usuario&) = delete;
+    Usuario& operator =(const Usuario&) = delete;
 
     //Observadores
     const Cadena& id() const;
@@ -57,15 +72,28 @@ public:
     const Cadena& direccion() const;
     const Tarjetas& tarjetas() const;
     const Articulos& compra() const;
+    unsigned int n_articulos() const;
+
+    //Modificadores
+    void compra(Articulo& art, unsigned int cant = 1);
 
     //Destructor
     ~Usuario();
+
+    //operador de insercion en flujo de salida
+    friend std::ostream& operator <<(std::ostream& os, const Usuario& us);
 private:
     const Cadena ide, nom, ape, dir;
     Clave pass;
     Tarjetas tarjs;
     Articulos carrito;
+
+    //Repetidos
+    static std::unordered_set<Cadena> registrados;
 };
+
+//Carro
+void mostrar_carro(std::ostream& os, const Usuario& us);
 
 //Implementaciones en línea
 inline const Cadena& Usuario::id() const{
@@ -92,9 +120,25 @@ inline const Usuario::Articulos& Usuario::compra() const{
     return carrito;
 }
 
-inline Usuario::~Usuario(){
-    for(auto t = tarjs.begin(); t != tarjs.end(); t++)
-        t->second->anula_titular();
+inline unsigned int Usuario::n_articulos() const{
+    return carrito.size();
+}
+
+
+
+class Usuario::Id_duplicado{
+public:
+    Id_duplicado(const Cadena& idup);
+    const Cadena& idd() const;
+private:
+    Cadena idupli;
+};
+
+//Definiciones en línea-------------------------------------------------------------------------------------
+inline Usuario::Id_duplicado::Id_duplicado(const Cadena& idup): idupli{idup}{}
+
+inline const Cadena& Usuario::Id_duplicado::idd() const{
+    return idupli;
 }
 
 #endif
