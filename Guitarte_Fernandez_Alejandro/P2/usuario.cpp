@@ -3,27 +3,25 @@
 #include <random>
 #include <cstring>
 
-std::unordered_set<Cadena> Usuario::registrados{};
+std::unordered_set<Cadena> Usuario::registrados;
 
 Clave::Clave(const char* passwd){
     if(strlen(passwd) < 5)
         throw Incorrecta{CORTA};
 
+    static const char* caracteres = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     std::random_device r;
-    std::uniform_int_distribution<int> dist(0, 62);
-    const char* caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    std::uniform_int_distribution<int> dist(0, strlen(caracteres));
     char salt[2] = {caracteres[dist(r)], caracteres[dist(r)]}; 
-    sal = salt;
 
-    try{
-        pass = crypt(passwd, sal.c_str());
-    }catch(...){
+    if(crypt(passwd, salt) == nullptr)
         throw Incorrecta{ERROR_CRYPT};
-    }
+    else
+        pass = crypt(passwd, salt);
 }
 
 bool Clave::verifica(const char* passwd) const{
-    return pass == crypt(passwd, sal.c_str());
+    return strcmp(pass.c_str(), crypt(passwd, pass.c_str())) == 0;
 }
 
 //USUARIO-------------------------------------------------------------------------------------------------
@@ -67,7 +65,7 @@ void mostrar_carro(std::ostream& os, const Usuario& us){
     os << "===========================================================" << std::endl;
 
     for(auto i = carro.begin(); i != carro.end(); i++){
-        os << "   " << i->second << "   " << i->first << std::endl;
+        os << "   " << i->second << "   " << *(i->first) << std::endl;
     }
 }
 

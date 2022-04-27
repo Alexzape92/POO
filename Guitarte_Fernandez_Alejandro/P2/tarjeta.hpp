@@ -1,8 +1,8 @@
 #ifndef TARJETA_HPP_
 #define TARJETA_HPP_
-#include "cadena.hpp"
+#include "../P1/cadena.hpp"
 #include "usuario.hpp"
-#include "fecha.hpp"
+#include "../P1/fecha.hpp"
 #include <set>
 #include <iostream>
 
@@ -13,13 +13,13 @@ public:
     typedef enum{LONGITUD, DIGITOS, NO_VALIDO} Razon;
     class Incorrecto;
 
-    Numero(const Cadena& cad);
+    explicit Numero(const Cadena& cad);
     operator const char*() const;
 private:
     Cadena num;
 };
 
-//Comparación
+ //Comparación
 bool operator <(const Numero& n1, const Numero& n2);
 
 class Numero::Incorrecto{
@@ -49,6 +49,7 @@ public:
     class Caducada;
     class Num_duplicado;
     class Desactivada{};
+    friend class Usuario;
 
     Tarjeta(const Numero& n, Usuario& tit, const Fecha& fec);
 
@@ -65,7 +66,6 @@ public:
 
     //Modificadores
     bool activa(bool a);
-    void anula_titular();
 
     //Destructor
     ~Tarjeta();
@@ -75,6 +75,7 @@ private:
     const Fecha caduc;
     bool act;
 
+    void anula_titular();   //Para que solo la pueda llamar Usuario
     static std::set<Numero> numeros;
 };
 

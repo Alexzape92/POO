@@ -1,5 +1,6 @@
 #include "tarjeta.hpp"
 #include "usuario.hpp"
+#include <cstring>
 
 //Para luhn
 bool luhn(const Cadena&);
@@ -7,35 +8,32 @@ bool luhn(const Cadena&);
 std::set<Numero> Tarjeta::numeros{};
 
 //CLASE NUMERO----------------------------------------------------------------------------------------
-Numero::Numero(const Cadena& cad): num{cad}{
-    unsigned int esp = 0, i = 0, j = 0;
-    for(i = 0; i < cad.length(); i++){
-        if(!isdigit((unsigned int)cad[i]) && !isspace((unsigned int)cad[i]))
-            throw Incorrecto{DIGITOS};
-        if(isspace((unsigned int)cad[i]))
-            esp++;
-    }
+Numero::Numero(const Cadena& cad){
+    unsigned int tamaux = 0;
 
-    Cadena aux{cad.length() - esp};
+    Cadena aux(cad.length());
+    for(unsigned int i = 0; i < cad.length(); i++){
+        if(!isspace((unsigned char)cad[i])){
+            if(!isdigit((unsigned char) cad[i]))    //Si el caracter no es ni un espacio ni un dígito, lanzamos excepción
+                throw Incorrecto{DIGITOS};
+            
+            aux[tamaux++] = cad[i];
+        }
+    }
+    if(tamaux != cad.length())
+        aux = aux.substr(0, tamaux); //Para tener el tamaño adecuado
+
     if(aux.length() < 13 || aux.length() > 19)
         throw Incorrecto{LONGITUD};
-    i = 0;  //Recorre cad
-    j = 0;  //Recorre aux
-    while(i < cad.length()){
-        if(!isspace((unsigned int)cad[i])){
-            aux[j] = cad[i];
-            j++;
-        }
-        i++;
-    }
-    num = aux;  //ya está inicializada sin espacios. Comprobemos ahora si es válido
     
-    if(!luhn(num))
+    if(!luhn(aux))
         throw Incorrecto{NO_VALIDO};
+    
+    num = aux;
 }
 
 bool operator <(const Numero& n1, const Numero& n2){
-    return n1 < n2;
+    return strcmp(n1, n2) < 0;
 }
 
 //Clase Tarjeta-----------------------------------------------------------------------------------------
@@ -48,8 +46,6 @@ caduc{fec}, act{true}{
 
     if(!numeros.insert(n).second)   //Comprobamos si está duplicado
         throw Num_duplicado{n};
-
-
 }
 
 Tarjeta::Tipo Tarjeta::tipo() const{
@@ -89,6 +85,7 @@ std::ostream& operator <<(std::ostream& os, const Tarjeta& tj){
 
     os << nombre << " " << apellidos << std::endl;
 
+    os << "Caduca: ";
     if(tj.caducidad().mes() < 10)
         os << "0" << tj.caducidad().mes();
     else

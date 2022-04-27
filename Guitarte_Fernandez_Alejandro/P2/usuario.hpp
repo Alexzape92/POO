@@ -1,6 +1,8 @@
 #ifndef USUARIO_HPP_
 #define USUARIO_HPP_
-#include "cadena.hpp"
+
+#include "../P1/cadena.hpp"
+
 #include "tarjeta.hpp"
 #include "articulo.hpp"
 #include <iostream>
@@ -24,7 +26,6 @@ public:
     bool verifica(const char* passwd) const;
 private:
     Cadena pass;
-    Cadena sal;
 };
 
 //Definiciones en línea Clave

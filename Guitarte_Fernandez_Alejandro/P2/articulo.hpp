@@ -1,7 +1,7 @@
 #ifndef ARTICULO_HPP_
 #define ARTICULO_HPP_
-#include "cadena.hpp"
-#include "fecha.hpp"
+#include "../P1/cadena.hpp"
+#include "../P1/fecha.hpp"
 #include <iostream>
 
 class Articulo{
