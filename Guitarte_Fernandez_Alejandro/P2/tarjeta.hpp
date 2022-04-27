@@ -15,10 +15,12 @@ public:
 
     Numero(const Cadena& cad);
     operator const char*() const;
-    friend bool operator <(const Numero& n1, const Numero& n2);
 private:
     Cadena num;
 };
+
+//Comparación
+bool operator <(const Numero& n1, const Numero& n2);
 
 class Numero::Incorrecto{
 public:

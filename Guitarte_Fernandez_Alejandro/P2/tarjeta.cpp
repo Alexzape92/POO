@@ -10,9 +10,9 @@ std::set<Numero> Tarjeta::numeros{};
 Numero::Numero(const Cadena& cad): num{cad}{
     unsigned int esp = 0, i = 0, j = 0;
     for(i = 0; i < cad.length(); i++){
-        if(!isdigit((unsigned int)cad[i]) && cad[i] != ' ')
+        if(!isdigit((unsigned int)cad[i]) && !isspace((unsigned int)cad[i]))
             throw Incorrecto{DIGITOS};
-        if(isspace(cad[i]))
+        if(isspace((unsigned int)cad[i]))
             esp++;
     }
 
@@ -22,7 +22,7 @@ Numero::Numero(const Cadena& cad): num{cad}{
     i = 0;  //Recorre cad
     j = 0;  //Recorre aux
     while(i < cad.length()){
-        if(!isspace(cad[i])){
+        if(!isspace((unsigned int)cad[i])){
             aux[j] = cad[i];
             j++;
         }
