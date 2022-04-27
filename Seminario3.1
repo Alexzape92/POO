@@ -24,7 +24,7 @@ private:
 */...*/
 };
 
-//EJERCICIO 2---------------------------------------------------------------------------------------------------------------------------------------
+//EJERCICIO 2-----------------------------------------------------------------------------------------------------------------------------------
 
 class Alumno{
 public:
@@ -58,6 +58,48 @@ private:
 	std::string aula;
 	int h_semana;
 };
+
+
+//EJERCICIO 5----------------------------------------------------------------------------------------------------------------------------------
+class Profesor_Grupo{
+public:
+	void imparte(const Profesor&, const Grupo&);
+	void imparte(const Grupo&, const Profesor&);
+	const std::set<Grupo*>& impartidos(const Profesor&) const;
+	const Profesor* impartidos(const Grupo&) const;
+private:
+	typedef std::map<Profesor*, std::set<Grupo*>> Profesores-Grupos;
+	typedef std::map<Grupo*, Profesor*> Grupos-Profesores;
+	
+	Profesores-Grupos prof-grp;
+	Grupos-Profesores grp_prof;
+}
+
+//EJERCICIO 4--------------------------------------------------------------------------------------------------------------------------------
+class Alumno_Asignatura{
+public:
+	void matriculado_en(const Alumno&, const Asignatura&, const Grupo&);
+	void matriculado_en(const Asignatura&, const Alumno&, const Grupo&);
+	const std::set<Asignatura*>& matriculados(const Alumno&) const;
+	const std::set<Alumno*>& matriculados(const Asignatura&) const;
+private:
+	typedef std::map<Alumno*, std::map<Asignatura*, Grupo*>> Alumnos-Asignaturas;
+	typedef std::map<Asignatura*, std::map<Alumno*, Grupo*>> Asignaturas-Alumnos;
+	
+	Alumnos-Asignaturas alum-asig;
+	Asignaturas-Alumnos asig-alum;
+}
+
+//EJERCICIO 6----------------------------------------------------------------------------------------------------------------------------------
+void Alumno_Asignatura::matriculado_en(const Alumno& Al, const Asignatura& As, const Grupo& G){
+	alum_asig[&Al][&As] = &G;	/*Los corchetes nos cambian el valor si la clave ya está insertada, con .insert() 									simplemente no cambiaría nada en caso de intentar añadirlo por segunda vez*/
+	asig_alum[&As][&Al] = &G;
+}
+
+void Alumno_Asignatura::matriculado_en(const Asignatura& As, const Alumno& Al, const Grupo& G){
+	matriculado_en(Al, As, G);
+}
+//EJERCICIO 7---------------------------------------------------------------------------------------------------------------------------------
 
 
 

@@ -12,7 +12,7 @@ Numero::Numero(const Cadena& cad): num{cad}{
     for(i = 0; i < cad.length(); i++){
         if(!isdigit((unsigned int)cad[i]) && cad[i] != ' ')
             throw Incorrecto{DIGITOS};
-        if(cad[i] == ' ')
+        if(isspace(cad[i]))
             esp++;
     }
 
@@ -22,7 +22,7 @@ Numero::Numero(const Cadena& cad): num{cad}{
     i = 0;  //Recorre cad
     j = 0;  //Recorre aux
     while(i < cad.length()){
-        if(cad[i] != ' '){
+        if(!isspace(cad[i])){
             aux[j] = cad[i];
             j++;
         }

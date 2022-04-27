@@ -16,14 +16,14 @@ Clave::Clave(const char* passwd){
     sal = salt;
 
     try{
-        pass = crypt(passwd, sal);
+        pass = crypt(passwd, sal.c_str());
     }catch(...){
         throw Incorrecta{ERROR_CRYPT};
     }
 }
 
 bool Clave::verifica(const char* passwd) const{
-    return pass == crypt(passwd, sal);
+    return pass == crypt(passwd, sal.c_str());
 }
 
 //USUARIO-------------------------------------------------------------------------------------------------

@@ -140,6 +140,10 @@ valgrind: ${MAIN_EXE} ${TEST_EXE}
 	valgrind --quiet ./${MAIN_EXE}
 	valgrind --quiet ./${TEST_EXE} --logger=minimal
 
+main: main.o ${OWN_OBJS}
+
+main.o: ${OWN_HDRS}
+
 ## Compilación ## 
 
 # Construye el programa de prueba de consola

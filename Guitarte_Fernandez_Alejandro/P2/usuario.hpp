@@ -24,7 +24,7 @@ public:
     bool verifica(const char* passwd) const;
 private:
     Cadena pass;
-    const char* sal;
+    Cadena sal;
 };
 
 //Definiciones en línea Clave
