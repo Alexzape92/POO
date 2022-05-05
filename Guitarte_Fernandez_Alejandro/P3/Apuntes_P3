@@ -1,0 +1,10 @@
+Orden a seguir:
+	1. LineaPedido
+	2. Usuario-Pedido -> Típica clase de asociación
+	3. Pedido-Artículo -> Clase de asociación. Tiene en cuenta LineaPedido
+	4. Pedido
+	5. Numero
+
+Para implementar su estructura (métodos y atributos) resultará útil mirar el diagrama, pues se ve todo bastante claro, al menos de las que no son de asociación (Que obviamente no aparecen en el diagrama, pues es un aspecto de diseño).
+
+Cada clase en un hpp-cpp distinto. LineaPedido está en Pedido-Artículo. Meter también los ficheros de la P2 en la carpeta P3/. No se buscan ficheros en la carpeta P2/.
