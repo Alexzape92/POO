@@ -6,6 +6,16 @@
 
 class LineaPedido;
 
+//CLASES DE OBJETOS A FUNCIÓN
+class OrdenaArticulos{
+    bool operator ()(const Articulo& a1, const Articulo& a2){return a1.referencia() < a2.referencia();}
+};
+
+class OrdenaPedidos{
+    bool operator ()(const Pedido& p1, const Pedido& p2){return p1.numero() < p2.numero();}
+};
+
+//PEDIDOARTICULO-----------------------------------------------------------------------------------------
 class Pedido_Articulo{
 public:
     typedef std::map<Articulo*, LineaPedido, OrdenaArticulos> ItemsPedido; //Añadir objeto función>
@@ -23,6 +33,30 @@ private:
     std::map<Articulo*, Pedidos, OrdenaArticulos> art_ped;
 };
 
+//Operadores de inserción en flujo de salida
+std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::ItemsPedido& ip);
+std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::Pedidos& peds);
+
+//Definiciones en línea para Pedido_Articulo
+inline const Pedido_Articulo::ItemsPedido& Pedido_Articulo::detalle(Pedido& ped) const{
+    auto i = ped_art.find(&ped);
+
+    if(i != ped_art.end())
+        return i->second;
+    else
+        return ItemsPedido{};
+}
+
+inline const Pedido_Articulo::Pedidos& Pedido_Articulo::ventas(Articulo& art) const{
+    auto i = art_ped.find(&art);
+
+    if(i != art_ped.end())
+        return i->second;
+    else
+        return Pedidos{};
+}
+
+//LINEAPEDIDO--------------------------------------------------------------------------------------
 class LineaPedido{
 public:
     //Constructor

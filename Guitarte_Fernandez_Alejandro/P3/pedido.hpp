@@ -8,7 +8,11 @@ class Pedido_Articulo;
 
 class Pedido{
 public:
+    //Constructores
     Pedido(Usuario_Pedido& up, Pedido_Articulo& pa,const Usuario& us, const Tarjeta& tarj, Fecha fec = Fecha());   
+
+    //Observadores
+    int numero() const;
 private:
     int num;
     const Tarjeta* tj;
