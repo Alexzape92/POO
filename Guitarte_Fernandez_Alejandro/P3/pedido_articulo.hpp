@@ -28,6 +28,8 @@ public:
     //Observadores
     const ItemsPedido& detalle(Pedido& ped) const;
     const Pedidos& ventas(Articulo& art) const;
+    void mostrarDetallePedidos(std::ostream& os) const;
+    void mostrarVentasArticulos(std::ostream& os) const;
 private:
     std::map<Pedido*, ItemsPedido, OrdenaPedidos> ped_art;
     std::map<Articulo*, Pedidos, OrdenaArticulos> art_ped;

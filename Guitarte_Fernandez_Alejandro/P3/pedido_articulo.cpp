@@ -17,24 +17,49 @@ std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::ItemsPedido& 
     for(auto i = ip.begin(); i != ip.end(); i++){
         os << std::fixed << std::setprecision(2) << i->second.precio_venta() <<
         " € " << std::left << std::setw(16) << i->second.cantidad() << "[" << i->first->referencia() << "] " <<
-        "\"" << i->first->titulo() << std::endl;
+        "\"" << i->first->titulo() << "\"" << std::endl;
 
         total += i->second.precio_venta();
     }
     os << "==================================================================" << std::endl;
     os << "Total   " << std::fixed << std::setprecision(2) << total << " €" << std::endl;
+
+    return os;
 }
 
 std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::Pedidos& peds){
+    double total = 0;
     os << "[Pedidos: " << peds.size() << "]" << std::endl;
     os << "==================================================================" << std::endl;
     os << "  PVP\tCantidad\t\tFecha de venta" << std::endl;
     os << "==================================================================" << std::endl;
     for(auto i = peds.begin(); i != peds.end(); i++){
-        os << std::fixed << std::setprecision(2) << " € ";
+        os << std::fixed << std::setprecision(2) << i->second.precio_venta() << " € " << std::left << std::setw(16) << i->second.cantidad() << i->first->fecha() << std::endl;
+        total += i->second.precio_venta();
     }
+    os << "==================================================================" << std::endl;
+    os << std::fixed << std::setprecision(2) << total << " €" << std::endl;
 }
 
+void Pedido_Articulo::mostrarDetallePedidos(std::ostream& os) const{
+    double total = 0;
+    for(auto i = ped_art.begin(); i != ped_art.end(); i++){
+        os << "Pedido núm. " << i->first->numero()<< std::endl; 
+        os << i->first->tarjeta().titular()->nombre() << "\t\t" << "Fecha: " << i->first->fecha() << std::endl;
+        os << detalle(*(i->first)) << std:: endl;
+
+        total += i->first->total();
+    }
+
+    os << "TOTAL VENTAS\t\t" << std::fixed << std::setprecision(2) << total << " € " << std::endl;
+}
+
+void Pedido_Articulo::mostrarVentasArticulos(std::ostream& os) const{
+    for(auto i = art_ped.begin(); i != art_ped.end(); i++){
+        os << "Ventas de [" << i->first->referencia() << "] \"" << i->first->titulo() << "\"" << std::endl;
+        os << ventas(*(i->first)) << std::endl;
+    }
+}
 
 std::ostream& operator <<(std::ostream& os, const LineaPedido& lp){
     return os << std::fixed << std::setprecision(2) << lp.precio_venta()<< " €\t" << lp.cantidad() << std::endl;
