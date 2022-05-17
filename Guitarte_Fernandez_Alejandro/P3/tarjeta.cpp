@@ -1,27 +1,35 @@
 #include "tarjeta.hpp"
 #include "usuario.hpp"
 #include <cstring>
+#include <algorithm>
+#include <functional>
+#include <iterator>
 
 //Para luhn
 bool luhn(const Cadena&);
 
 std::set<Numero> Tarjeta::numeros{};
 
+
+struct EsBlanco{
+    bool operator ()(char c){return isspace(c);}
+};
+
+struct EsDigito{
+    bool operator ()(char c){return isdigit(c);}
+};
+
 //CLASE NUMERO----------------------------------------------------------------------------------------
 Numero::Numero(const Cadena& cad){
-    unsigned int tamaux = 0;
+    Cadena aux{cad};
+    auto fin = std::remove_if(aux.begin(), aux.end(), EsBlanco{});
 
-    Cadena aux(cad.length());
-    for(unsigned int i = 0; i < cad.length(); i++){
-        if(!isspace((unsigned char)cad[i])){
-            if(!isdigit((unsigned char) cad[i]))    //Si el caracter no es ni un espacio ni un dígito, lanzamos excepción
-                throw Incorrecto{DIGITOS};
-            
-            aux[tamaux++] = cad[i];
-        }
-    }
-    if(tamaux != cad.length())
-        aux = aux.substr(0, tamaux); //Para tener el tamaño adecuado
+    aux = aux.substr(0, fin - aux.begin()); //Quitamos los espacios
+
+    EsDigito digit{};
+    auto nodigit = std::not_fn(digit);
+    if(std::find_if(aux.begin(), aux.end(), nodigit) != aux.end())
+        throw Incorrecto{DIGITOS};
 
     if(aux.length() < 13 || aux.length() > 19)
         throw Incorrecto{LONGITUD};

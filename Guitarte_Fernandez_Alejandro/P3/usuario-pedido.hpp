@@ -1,9 +1,11 @@
 #ifndef UP_HPP_
 #define UP_HPP_
-#include "usuario.hpp"
-#include "pedido.hpp"
+
 #include <map>
 #include <set>
+
+class Pedido;
+class Usuario;
 
 class Usuario_Pedido{
 public:

@@ -1,33 +1,40 @@
 #ifndef PA_HPP_
 #define PA_HPP_
-#include "pedido.hpp"
+
 #include "articulo.hpp"
+#include "pedido.hpp"
 #include <iostream>
 
 class LineaPedido;
+class Pedido;
+class Articulo;
 
 //CLASES DE OBJETOS A FUNCIÓN
-class OrdenaArticulos{
-    bool operator ()(const Articulo& a1, const Articulo& a2){return a1.referencia() < a2.referencia();}
+struct OrdenaArticulos{
+    bool operator ()(const Articulo* a1, const Articulo* a2) const;
 };
 
-class OrdenaPedidos{
-    bool operator ()(const Pedido& p1, const Pedido& p2){return p1.numero() < p2.numero();}
+struct OrdenaPedidos{
+    bool operator ()(const Pedido* p1, const Pedido* p2) const;
 };
+
+inline bool OrdenaArticulos::operator()(const Articulo* a1, const Articulo* a2) const{
+    return a1->referencia() < a2->referencia();
+}
 
 //PEDIDOARTICULO-----------------------------------------------------------------------------------------
 class Pedido_Articulo{
 public:
-    typedef std::map<Articulo*, LineaPedido, OrdenaArticulos> ItemsPedido; //Añadir objeto función>
-    typedef std::map<Pedido*, LineaPedido, OrdenaPedidos> Pedidos; //añadir objeto función
+    typedef std::map<Articulo*, LineaPedido, OrdenaArticulos> ItemsPedido;
+    typedef std::map<Pedido*, LineaPedido, OrdenaPedidos> Pedidos;
 
     //Asociadores
     void pedir(Pedido& ped, Articulo& art, double prec, int cant = 1);
     void pedir(Articulo& art, Pedido& ped, double prec, int cant = 1);
 
     //Observadores
-    const ItemsPedido& detalle(Pedido& ped) const;
-    const Pedidos& ventas(Articulo& art) const;
+    ItemsPedido detalle(Pedido& ped) const;
+    Pedidos ventas(Articulo& art) const;
     void mostrarDetallePedidos(std::ostream& os) const;
     void mostrarVentasArticulos(std::ostream& os) const;
 private:
@@ -38,25 +45,6 @@ private:
 //Operadores de inserción en flujo de salida
 std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::ItemsPedido& ip);
 std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::Pedidos& peds);
-
-//Definiciones en línea para Pedido_Articulo
-inline const Pedido_Articulo::ItemsPedido& Pedido_Articulo::detalle(Pedido& ped) const{
-    auto i = ped_art.find(&ped);
-
-    if(i != ped_art.end())
-        return i->second;
-    else
-        return ItemsPedido{};
-}
-
-inline const Pedido_Articulo::Pedidos& Pedido_Articulo::ventas(Articulo& art) const{
-    auto i = art_ped.find(&art);
-
-    if(i != art_ped.end())
-        return i->second;
-    else
-        return Pedidos{};
-}
 
 //LINEAPEDIDO--------------------------------------------------------------------------------------
 class LineaPedido{

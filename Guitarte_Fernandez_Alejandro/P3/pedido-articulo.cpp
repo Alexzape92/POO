@@ -1,5 +1,9 @@
-#include "pedido_articulo.hpp"
+#include "pedido-articulo.hpp"
 #include <iomanip>
+
+bool OrdenaPedidos::operator ()(const Pedido* p1, const Pedido* p2) const{
+    return p1->numero() < p2->numero();
+}
 
 void Pedido_Articulo::pedir(Pedido& ped, Articulo& art, double prec, int cant){
     ped_art[&ped][&art] = LineaPedido(prec, cant);
@@ -8,6 +12,24 @@ void Pedido_Articulo::pedir(Pedido& ped, Articulo& art, double prec, int cant){
 
 void Pedido_Articulo::pedir(Articulo& art, Pedido& ped, double prec, int cant){
     pedir(ped, art, prec, cant);
+}
+
+Pedido_Articulo::ItemsPedido Pedido_Articulo::detalle(Pedido& ped) const{
+    auto i = ped_art.find(&ped);
+
+    if(i != ped_art.end())
+        return i->second;
+    else
+        return ItemsPedido{};
+}
+
+Pedido_Articulo::Pedidos Pedido_Articulo::ventas(Articulo& art) const{
+    auto i = art_ped.find(&art);
+
+    if(i != art_ped.end())
+        return i->second;
+    else
+        return Pedidos{};
 }
 
 std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::ItemsPedido& ip){
@@ -39,6 +61,8 @@ std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::Pedidos& peds
     }
     os << "==================================================================" << std::endl;
     os << std::fixed << std::setprecision(2) << total << " €" << std::endl;
+
+    return os;
 }
 
 void Pedido_Articulo::mostrarDetallePedidos(std::ostream& os) const{
