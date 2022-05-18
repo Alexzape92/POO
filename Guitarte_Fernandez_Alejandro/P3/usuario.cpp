@@ -9,19 +9,21 @@ Clave::Clave(const char* passwd){
     if(strlen(passwd) < 5)
         throw Incorrecta{CORTA};
 
-    static const char* caracteres = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    static const char caracteres[] = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     std::random_device r;
     std::uniform_int_distribution<int> dist(0, strlen(caracteres));
     char salt[2] = {caracteres[dist(r)], caracteres[dist(r)]}; 
 
-    if(crypt(passwd, salt) == nullptr)
+    char *crip = crypt(passwd, salt);
+
+    if(crip == nullptr)
         throw Incorrecta{ERROR_CRYPT};
     else
-        pass = crypt(passwd, salt);
+        pass = crip;
 }
 
 bool Clave::verifica(const char* passwd) const{
-    return strcmp(pass.c_str(), crypt(passwd, pass.c_str())) == 0;
+    return strcmp(crypt(passwd, pass.c_str()), pass.c_str()) == 0;
 }
 
 //USUARIO-------------------------------------------------------------------------------------------------

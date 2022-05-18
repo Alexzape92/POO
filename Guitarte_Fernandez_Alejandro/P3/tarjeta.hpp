@@ -5,8 +5,17 @@
 #include "../P1/fecha.hpp"
 #include <set>
 #include <iostream>
+#include <algorithm>
 
 class Usuario;
+
+struct EsBlanco: public std::unary_function<char,bool>{
+    bool operator ()(char c) const{return isspace(c);}
+};
+
+struct EsDigito: public std::unary_function<char,bool>{
+    bool operator ()(char c) const{return isdigit(c);}
+};
 
 class Numero{
 public:

@@ -1,7 +1,6 @@
 #include "tarjeta.hpp"
 #include "usuario.hpp"
 #include <cstring>
-#include <algorithm>
 #include <functional>
 #include <iterator>
 
@@ -10,25 +9,17 @@ bool luhn(const Cadena&);
 
 std::set<Numero> Tarjeta::numeros{};
 
-
-struct EsBlanco{
-    bool operator ()(char c){return isspace(c);}
-};
-
-struct EsDigito{
-    bool operator ()(char c){return isdigit(c);}
-};
-
 //CLASE NUMERO----------------------------------------------------------------------------------------
 Numero::Numero(const Cadena& cad){
     Cadena aux{cad};
     auto fin = std::remove_if(aux.begin(), aux.end(), EsBlanco{});
 
-    aux = aux.substr(0, fin - aux.begin()); //Quitamos los espacios
-
-    EsDigito digit{};
-    auto nodigit = std::not_fn(digit);
-    if(std::find_if(aux.begin(), aux.end(), nodigit) != aux.end())
+    if(fin != aux.end()){
+        *fin = '\0';
+        Cadena sd (aux.c_str());
+        aux = sd;
+    }
+    if(std::find_if(aux.begin(), aux.end(), std::not1(EsDigito{})) != aux.end())
         throw Incorrecto{DIGITOS};
 
     if(aux.length() < 13 || aux.length() > 19)

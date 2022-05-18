@@ -16,12 +16,12 @@ class Tarjeta;
 class Pedido{
 public:
     //Constructores
-    Pedido(Usuario_Pedido& up, Pedido_Articulo& pa,const Usuario& us, const Tarjeta& tarj, Fecha fec = Fecha());   
+    Pedido(Usuario_Pedido& up, Pedido_Articulo& pa, Usuario& us, const Tarjeta& tarj, Fecha fec = Fecha());   
 
     //Observadores
     int numero() const {return num;}
     const Fecha& fecha() const {return fch;}
-    const Tarjeta& tarjeta() const {return *tj;}
+    const Tarjeta* tarjeta() const {return tj;}
     double total() const {return imp;}
     static int n_total_pedidos() {return ultimo;}
 
@@ -46,11 +46,15 @@ std::ostream& operator <<(std::ostream& os, const Pedido& ped);
 class Pedido::SinStock{
     Articulo *art;
 public:
-    SinStock(Articulo& arti);
-    const Articulo& articulo() const {return *art;}
+    SinStock(Articulo* arti);
+    Articulo& articulo() const;
 };
 
-inline Pedido::SinStock::SinStock(Articulo& arti): art{&arti}{}
+inline Pedido::SinStock::SinStock(Articulo* arti): art{arti}{}
+
+inline Articulo& Pedido::SinStock::articulo() const{
+    return *art;
+}
 
 
 class Pedido::Vacio{

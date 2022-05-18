@@ -6,8 +6,8 @@ bool OrdenaPedidos::operator ()(const Pedido* p1, const Pedido* p2) const{
 }
 
 void Pedido_Articulo::pedir(Pedido& ped, Articulo& art, double prec, int cant){
-    ped_art[&ped][&art] = LineaPedido(prec, cant);
-    art_ped[&art][&ped] = LineaPedido(prec, cant);
+    ped_art[&ped].insert(std::make_pair(&art, LineaPedido(prec, cant)));
+    art_ped[&art].insert(std::make_pair(&ped, LineaPedido(prec, cant)));
 }
 
 void Pedido_Articulo::pedir(Articulo& art, Pedido& ped, double prec, int cant){
@@ -69,7 +69,7 @@ void Pedido_Articulo::mostrarDetallePedidos(std::ostream& os) const{
     double total = 0;
     for(auto i = ped_art.begin(); i != ped_art.end(); i++){
         os << "Pedido núm. " << i->first->numero()<< std::endl; 
-        os << i->first->tarjeta().titular()->nombre() << "\t\t" << "Fecha: " << i->first->fecha() << std::endl;
+        os << i->first->tarjeta()->titular()->nombre() << "\t\t" << "Fecha: " << i->first->fecha() << std::endl;
         os << detalle(*(i->first)) << std:: endl;
 
         total += i->first->total();

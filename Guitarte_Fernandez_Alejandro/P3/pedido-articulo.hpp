@@ -5,9 +5,36 @@
 #include "pedido.hpp"
 #include <iostream>
 
-class LineaPedido;
 class Pedido;
 class Articulo;
+
+//LINEAPEDIDO--------------------------------------------------------------------------------------
+class LineaPedido{
+public:
+    //Constructor
+    explicit LineaPedido(double prec, int cant = 1);
+
+    //Observadores
+    double precio_venta() const;
+    int cantidad() const;
+private:
+    double pv;
+    int canti;
+};
+
+//Operador de inserción en flujo de salida
+std::ostream& operator <<(std::ostream& os, const LineaPedido& lp);
+
+//Definiciones en-línea para LineaPedido
+inline LineaPedido::LineaPedido(double prec, int cant):pv{prec}, canti{cant}{}
+
+inline double LineaPedido::precio_venta() const{
+    return pv;
+}
+
+inline int LineaPedido::cantidad() const{
+    return canti;
+}
 
 //CLASES DE OBJETOS A FUNCIÓN
 struct OrdenaArticulos{
@@ -45,34 +72,6 @@ private:
 //Operadores de inserción en flujo de salida
 std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::ItemsPedido& ip);
 std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::Pedidos& peds);
-
-//LINEAPEDIDO--------------------------------------------------------------------------------------
-class LineaPedido{
-public:
-    //Constructor
-    explicit LineaPedido(double prec, int cant = 1);
-
-    //Observadores
-    double precio_venta() const;
-    int cantidad() const;
-private:
-    double pv;
-    int canti;
-};
-
-//Operador de inserción en flujo de salida
-std::ostream& operator <<(std::ostream& os, const LineaPedido& lp);
-
-//Definiciones en-línea para LineaPedido
-inline LineaPedido::LineaPedido(double prec, int cant):pv{prec}, canti{cant}{}
-
-inline double LineaPedido::precio_venta() const{
-    return pv;
-}
-
-inline int LineaPedido::cantidad() const{
-    return canti;
-}
 
 
 #endif
