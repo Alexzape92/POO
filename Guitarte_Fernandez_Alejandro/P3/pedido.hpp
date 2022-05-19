@@ -16,12 +16,12 @@ class Tarjeta;
 class Pedido{
 public:
     //Constructores
-    Pedido(Usuario_Pedido& up, Pedido_Articulo& pa, Usuario& us, const Tarjeta& tarj, Fecha fec = Fecha());   
+    Pedido(Usuario_Pedido& up, Pedido_Articulo& pa, Usuario& us, const Tarjeta& tarj, const Fecha& fec = Fecha());   
 
     //Observadores
     int numero() const {return num;}
     const Fecha& fecha() const {return fch;}
-    const Tarjeta* tarjeta() const {return tj;}
+    const Tarjeta* tarjeta() const {return tarjeta_;}
     double total() const {return imp;}
     static int n_total_pedidos() {return ultimo;}
 
@@ -31,7 +31,7 @@ public:
     class Impostor;
 private:
     int num;
-    const Tarjeta* tj;
+    const Tarjeta* tarjeta_;
     Fecha fch;
     double imp;
 

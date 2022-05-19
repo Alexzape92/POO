@@ -12,21 +12,21 @@ class Articulo;
 class LineaPedido{
 public:
     //Constructor
-    explicit LineaPedido(double prec, int cant = 1);
+    explicit LineaPedido(double prec, unsigned cant = 1);
 
     //Observadores
     double precio_venta() const;
     int cantidad() const;
 private:
     double pv;
-    int canti;
+    unsigned canti;
 };
 
 //Operador de inserción en flujo de salida
 std::ostream& operator <<(std::ostream& os, const LineaPedido& lp);
 
 //Definiciones en-línea para LineaPedido
-inline LineaPedido::LineaPedido(double prec, int cant):pv{prec}, canti{cant}{}
+inline LineaPedido::LineaPedido(double prec, unsigned cant):pv{prec}, canti{cant}{}
 
 inline double LineaPedido::precio_venta() const{
     return pv;
@@ -56,8 +56,8 @@ public:
     typedef std::map<Pedido*, LineaPedido, OrdenaPedidos> Pedidos;
 
     //Asociadores
-    void pedir(Pedido& ped, Articulo& art, double prec, int cant = 1);
-    void pedir(Articulo& art, Pedido& ped, double prec, int cant = 1);
+    void pedir(Pedido& ped, Articulo& art, double prec, unsigned cant = 1);
+    void pedir(Articulo& art, Pedido& ped, double prec, unsigned cant = 1);
 
     //Observadores
     ItemsPedido detalle(Pedido& ped) const;

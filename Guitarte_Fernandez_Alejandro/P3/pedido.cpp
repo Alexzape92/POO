@@ -4,8 +4,8 @@
 int Pedido::ultimo{1};  //El primer pedido será el 1
 
 
-Pedido::Pedido(Usuario_Pedido& up, Pedido_Articulo& pa, Usuario& us, const Tarjeta& tarj, Fecha fec):
-num{ultimo++}, tj{&tarj}, fch{fec}, imp{0}{
+Pedido::Pedido(Usuario_Pedido& up, Pedido_Articulo& pa, Usuario& us, const Tarjeta& tarj, const Fecha& fec):
+num{ultimo++}, tarjeta_{&tarj}, fch{fec}, imp{0}{
     if(&us != tarj.titular()){
         ultimo--;   //Dejamos el contador por donde iba
         throw Impostor{const_cast<Usuario&>(us)};
@@ -48,7 +48,12 @@ num{ultimo++}, tj{&tarj}, fch{fec}, imp{0}{
 std::ostream& operator <<(std::ostream& os, const Pedido& ped){
     os << "Núm. pedido: " << ped.numero() << std::endl;
     os << std::left << std::setw(13) << "Fecha:" << ped.fecha() << std::endl;
-    os << std::left << std::setw(13) << "Pagado con:" << ped.tarjeta()->tipo() << " n.º: " << ped.tarjeta()->numero() << std::endl;
+    os << std::left << std::setw(13) << "Pagado con:";
+    if(ped.tarjeta()->tipo() == Tarjeta::Otro)
+        os << "Tipo indeterminado";
+    else    
+        os << ped.tarjeta()->tipo();
+    os << " n.º: " << ped.tarjeta()->numero() << std::endl;
     os << std::left << std::setw(13) << "Importe:" << std::fixed << std::setprecision(2) << ped.total() << " €" << std::endl;
 
     return os;

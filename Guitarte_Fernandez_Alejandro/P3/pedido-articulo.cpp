@@ -5,12 +5,12 @@ bool OrdenaPedidos::operator ()(const Pedido* p1, const Pedido* p2) const{
     return p1->numero() < p2->numero();
 }
 
-void Pedido_Articulo::pedir(Pedido& ped, Articulo& art, double prec, int cant){
+void Pedido_Articulo::pedir(Pedido& ped, Articulo& art, double prec, unsigned cant){
     ped_art[&ped].insert(std::make_pair(&art, LineaPedido(prec, cant)));
     art_ped[&art].insert(std::make_pair(&ped, LineaPedido(prec, cant)));
 }
 
-void Pedido_Articulo::pedir(Articulo& art, Pedido& ped, double prec, int cant){
+void Pedido_Articulo::pedir(Articulo& art, Pedido& ped, double prec, unsigned cant){
     pedir(ped, art, prec, cant);
 }
 
@@ -57,7 +57,7 @@ std::ostream& operator <<(std::ostream& os, const Pedido_Articulo::Pedidos& peds
     os << "==================================================================" << std::endl;
     for(auto i = peds.begin(); i != peds.end(); i++){
         os << std::fixed << std::setprecision(2) << i->second.precio_venta() << " € " << std::left << std::setw(16) << i->second.cantidad() << i->first->fecha() << std::endl;
-        total += i->second.precio_venta();
+        total += i->second.precio_venta() * i->second.cantidad();
     }
     os << "==================================================================" << std::endl;
     os << std::fixed << std::setprecision(2) << total << " €" << std::endl;
