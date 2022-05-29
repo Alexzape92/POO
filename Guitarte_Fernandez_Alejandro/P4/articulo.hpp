@@ -22,6 +22,9 @@ public:
     //Clase abstracta
     virtual void impresion_especifica(std::ostream& os) const = 0;
 
+    //Excepciones
+    class Autores_vacios{};
+
     //Relacion con autores
     typedef std::set<Autor*> Autores;
 
@@ -36,9 +39,7 @@ public:
     double precio() const;
     double& precio();
 
-    virtual void mostrar(std::ostream& os) = 0;
-
-    virtual ~Articulo();
+    virtual ~Articulo(){}
 private:
     Autores aus;
     const Cadena cod, tit;
@@ -51,8 +52,6 @@ std::ostream& operator <<(std::ostream& os, const Articulo& art);
 
 
 //Implementaciones en línea
-inline Articulo::Articulo(Autores& au, const Cadena& c, const Cadena& t, const Fecha& fec, double pr): aus{au}, cod{c}, tit{t}, pub{fec}, prec{pr}{}
-
 inline Articulo::Autores Articulo::autores() const{
     return aus;
 }
@@ -85,6 +84,7 @@ public:
     Articulo{au, c, t, fec, pr}, exp{ex}{}
 
     const Fecha& f_expir() const {return exp;}
+    void impresion_especifica(std::ostream& os) const;
 };
 
 //ARTICULOALMACENABLE(ABS)------------------------------------------------------------------------------
@@ -96,11 +96,29 @@ public:
 
     int stock() const {return stock_;}
     int& stock() {return stock_;}
+    virtual void impresion_especifica(std::ostream& os) const = 0;
 };
 
 //LIBRO-------------------------------------------------------------------------------------------------
 class Libro: public ArticuloAlmacenable{
-    
+    int n_pag_;
+public:
+    Libro(Autores& au, const Cadena& c, const Cadena& t, const Fecha& fec, double pr, int npag, int st = 0):
+    ArticuloAlmacenable{au, c, t, fec, pr, st}, n_pag_{npag}{}
+
+    int n_pag() const{return n_pag_;}
+    void impresion_especifica(std::ostream& os) const;
+};
+
+class Cederron: public ArticuloAlmacenable{
+    int tam_;
+public:
+    Cederron(Autores& au, const Cadena& c, const Cadena& t, const Fecha& fec, double pr, int tam, int st = 0):
+    ArticuloAlmacenable{au, c, t, fec, pr, st}, tam_{tam}{}
+
+    int tam() const{return tam_;}
+    void impresion_especifica(std::ostream& os) const;
+
 };
 
 #endif

@@ -27,21 +27,36 @@ num{ultimo++}, tarjeta_{&tarj}, fch{fec}, imp{0}{
     }
 
     for(auto i = us.compra().begin(); i != us.compra().end(); i++){
-        if(i->first->stock() < i->second){ //No tenemos stock suficiente
-            ultimo--;   //Dejamos el contador por donde iba
-            auto point = i->first;
-            const_cast<Usuario::Articulos&>(us.compra()).clear();   //Vaciamos el carrito
-            throw SinStock{point};
+        if(ArticuloAlmacenable* art = dynamic_cast<ArticuloAlmacenable*>(i->first)){    //Si no es nulo el puntero
+            if(art->stock() < i->second){ //No tenemos stock suficiente
+                ultimo--;   //Dejamos el contador por donde iba
+                auto point = i->first;
+                const_cast<Usuario::Articulos&>(us.compra()).clear();   //Vaciamos el carrito
+                throw SinStock{point};
+            }
         }
     }
 
     up.asocia(*this, us);    //Relacion Usuario-Pedido
+    bool continua = true;
     for(auto i = us.compra().begin(); i != us.compra().end(); i++){
-        i->first->stock() -= i->second; //Disminuimos el stock
-        pa.pedir(*(i->first), *this, i->first->precio(), i->second);
-        imp += i->first->precio() * i->second;      //Importe del producto
+        if(ArticuloAlmacenable* art = dynamic_cast<ArticuloAlmacenable*>(i->first))
+            art->stock() -= i->second; //Disminuimos el stock
+        else{
+            LibroDigital *lib = dynamic_cast<LibroDigital*>(i->first);  //Será un libdig seguro
+            if(lib->f_expir() < Fecha())
+                continua = false;
+        }
+        if(continua){
+            pa.pedir(*(i->first), *this, i->first->precio(), i->second);
+            imp += i->first->precio() * i->second;      //Importe del producto
+        }
+        continua = true;
     }
     const_cast<Usuario::Articulos&>(us.compra()).clear();   //Vaciamos el carrito
+
+    if(pa.detalle(*this).empty())
+        throw Vacio{const_cast<Usuario&>(us)};
 }
 
 

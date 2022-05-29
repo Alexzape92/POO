@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <random>
 #include <cstring>
+#include <iomanip>
 
 std::unordered_set<Cadena> Usuario::registrados;
 
@@ -67,7 +68,9 @@ void mostrar_carro(std::ostream& os, const Usuario& us){
     os << "===========================================================" << std::endl;
 
     for(auto i = carro.begin(); i != carro.end(); i++){
-        os << "   " << i->second << "   " << *(i->first) << std::endl;
+        os << "   " << i->second << "   [" << i->first->referencia() << "] \"" << 
+        i->first->titulo() << "\", " << i->first->f_publi().anno() << ". " <<
+        std::fixed << std::setprecision(2) << i->first->precio() << " €" << std::endl;
     }
 }
 
