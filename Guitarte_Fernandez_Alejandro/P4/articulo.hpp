@@ -10,9 +10,9 @@ class Autor{
     Cadena nombre_, apellidos_, direccion_;
 public:
     Autor(const Cadena& nom, const Cadena& ape, const Cadena& dir): nombre_{nom}, apellidos_{ape}, direccion_{dir}{}
-    const Cadena& nombre() const {return nombre_;}
-    const Cadena& apellidos() const {return apellidos_;}
-    const Cadena& direccion() const {return direccion_;}
+    const Cadena& nombre() const noexcept {return nombre_;}
+    const Cadena& apellidos() const noexcept {return apellidos_;}
+    const Cadena& direccion() const noexcept {return direccion_;}
 };
 
 
@@ -78,17 +78,18 @@ inline double& Articulo::precio(){
 
 //LIBRODIGITAL-------------------------------------------------------------------------------------
 class LibroDigital: public Articulo{
-    Fecha exp;
+    Fecha f_expir_;
 public:
     LibroDigital(Autores& au, const Cadena& c, const Cadena& t, const Fecha& fec, double pr, const Fecha& ex):
-    Articulo{au, c, t, fec, pr}, exp{ex}{}
+    Articulo{au, c, t, fec, pr}, f_expir_{ex}{}
 
-    const Fecha& f_expir() const {return exp;}
+    const Fecha& f_expir() const {return f_expir_;}
     void impresion_especifica(std::ostream& os) const;
 };
 
 //ARTICULOALMACENABLE(ABS)------------------------------------------------------------------------------
 class ArticuloAlmacenable: public Articulo{
+protected:
     int stock_;
 public:
     ArticuloAlmacenable(Autores& au, const Cadena& c, const Cadena& t, const Fecha& fec, double pr, int st = 0):

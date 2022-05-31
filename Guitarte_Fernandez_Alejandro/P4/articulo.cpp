@@ -29,13 +29,13 @@ std::ostream& operator <<(std::ostream& os, const Articulo& art){
 }
 
 void LibroDigital::impresion_especifica(std::ostream& os) const{
-    os << "A la venta hasta el " << f_expir() << ".";
+    os << "A la venta hasta el " << f_expir_ << ".";
 }
 
 void Libro::impresion_especifica(std::ostream& os) const{
-    os << n_pag() << " págs., " << stock() << " unidades.";
+    os << n_pag_ << " págs., " << stock_ << " unidades.";
 }
 
 void Cederron::impresion_especifica(std::ostream& os) const{
-    os << tam() << " MB, " << stock() << " unidades.";
+    os << tam_ << " MB, " << stock_ << " unidades.";
 }   
